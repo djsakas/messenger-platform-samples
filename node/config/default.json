@@ -1,6 +1,6 @@
 {
     "appSecret": "fa8f280b87364855c640a10eb8bb31e4",
-    "pageAccessToken": "EAAE7RFu0DsABAKDylqGpkrK5D90LYtIZBe2BqOJD8amnxJOZCK8NxbcwFQk92HFqbwWV0f5ZAAAnh4hcs8445AspMCNCtCRn4ZAlaGfh7LFzRyJx0Vwr59EORrwddcKMJJ1amDZBntK74SLgdH4G9SMANmd6crKgwFhGn9CLtEQZDZD",
+    "pageAccessToken": "",
     "validationToken": "my_test_token",
     "serverURL": "https:\/\/my-bot-my-messenger-bot.44fs.preview.openshiftapps.com\/"
 }
