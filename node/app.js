@@ -258,12 +258,12 @@ function receivedMessage(event) {
   if (messageText) {
 
 	var msg = messageText.toLowerCase();
-	if(msg.indexOf("ciao")){
+	if(msg.indexOf("ciao") > -1){
 		//Saluto
 		var userName = getUserName(senderID);
 		sendTextMessage(senderID, "Ciao " + userName);
 	}
-	else if(msg.indexOf("il king dei derp") || msg.indexOf("ragozzino")){
+	else if(msg.indexOf("il king dei derp") > -1 || msg.indexOf("ragozzino") > -1){
 		sendTextMessage(senderID, "Ebbene si l'unico che merita questo appellativo è proprio lui, l'inimitabile e inarrivabile King del derpaggio, Giuseppe Ragozzino!");
 		sendImageMessage(senderID, "/assets/king.jpg")
 	}
