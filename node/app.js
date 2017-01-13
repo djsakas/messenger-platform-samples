@@ -260,8 +260,7 @@ function receivedMessage(event) {
 	var msg = messageText.toLowerCase();
 	if(msg.indexOf("ciao") > -1){
 		//Saluto
-		var userName = getUserName(senderID);
-		sendTextMessage(senderID, "Ciao " + userName);
+		sendHello(senderID);
 	}
 	else if(msg.indexOf("il king dei derp") > -1 || msg.indexOf("ragozzino") > -1){
 		sendTextMessage(senderID, "Ebbene si l'unico che merita questo appellativo è proprio lui, l'inimitabile e inarrivabile King del derpaggio, Giuseppe Ragozzino!");
@@ -765,7 +764,7 @@ function sendAccountLinking(recipientId) {
   callSendAPI(messageData);
 }
 
-function getUserName(userID){
+function sendHello(userID){
 	request({
     uri: 'https://graph.facebook.com/v2.6/' + userID,
     qs: { access_token: PAGE_ACCESS_TOKEN },
@@ -774,7 +773,7 @@ function getUserName(userID){
   }, function (error, response, body) {
     if (!error && response.statusCode == 200) { 
 		console.log("Successfully called  API for getting user name of " + userID);
-		return response.name;
+		sendTextMessage(senderID, "Ciao " + response.name);
 
     } else {
       console.error("Failed calling Send API", response.statusCode, response.statusMessage, body.error);
