@@ -773,7 +773,8 @@ function sendHello(userID){
   }, function (error, response, body) {
     if (!error && response.statusCode == 200) { 
 		console.log("Successfully called  API for getting user name of " + userID + " BODY:  " + body);
-		sendTextMessage(userID, "Ciao " + response.first_name);
+	    	var data = JSON.parse(body);
+		sendTextMessage(userID, "Ciao " + data.first_name);
 
     } else {
       console.error("Failed calling Send API", response.statusCode, response.statusMessage, body.error);
