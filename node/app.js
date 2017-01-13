@@ -778,7 +778,6 @@ function sendHello(userID){
 
     } else {
       console.error("Failed calling Send API", response.statusCode, response.statusMessage, body.error);
-	  return "ERROR";
     }
   });  
 }
