@@ -772,7 +772,7 @@ function sendHello(userID){
 
   }, function (error, response, body) {
     if (!error && response.statusCode == 200) { 
-		console.log("Successfully called  API for getting user name of " + userID);
+		console.log("Successfully called  API for getting user name of " + userID + " RESPONSE: " + response + " BODY:  " + body);
 		sendTextMessage(userID, "Ciao " + response.name);
 
     } else {
