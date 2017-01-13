@@ -244,72 +244,40 @@ function receivedMessage(event) {
     var quickReplyPayload = quickReply.payload;
     console.log("Quick reply for message %s with payload %s",
       messageId, quickReplyPayload);
-
-    sendTextMessage(senderID, "Quick reply tapped");
+		if(quickReplyPayload === "QUANTO_MI_SENTO_DERP_PICK_POCO"){
+			sendTextMessage(senderID, "La tua risposta mi fa capire che stai derpando talmente tanto da non rederti conto di quanto tu sia derp...");
+		}else if(quickReplyPayload === "QUANTO_MI_SENTO_DERP_PICK_ABBASTANZA"){
+			sendTextMessage(senderID, "Se dici così vuole dire che non riesci ad ammetterlo, ma il realtà stai derpando molto!");
+		}else if(quickReplyPayload === "QUANTO_MI_SENTO_DERP_PICK_MOLTO"){
+			sendTextMessage(senderID, "Bravo! Così ti voglio! Carico e derpante!");
+		}
+    
     return;
   }
 
   if (messageText) {
-
-    // If we receive a text message, check to see if it matches any special
-    // keywords and send back the corresponding example. Otherwise, just echo
-    // the text we received.
-    switch (messageText) {
-      case 'image':
-        sendImageMessage(senderID);
-        break;
-
-      case 'gif':
-        sendGifMessage(senderID);
-        break;
-
-      case 'audio':
-        sendAudioMessage(senderID);
-        break;
-
-      case 'video':
-        sendVideoMessage(senderID);
-        break;
-
-      case 'file':
-        sendFileMessage(senderID);
-        break;
-
-      case 'button':
-        sendButtonMessage(senderID);
-        break;
-
-      case 'generic':
-        sendGenericMessage(senderID);
-        break;
-
-      case 'receipt':
-        sendReceiptMessage(senderID);
-        break;
-
-      case 'quick reply':
-        sendQuickReply(senderID);
-        break;        
-
-      case 'read receipt':
-        sendReadReceipt(senderID);
-        break;        
-
-      case 'typing on':
-        sendTypingOn(senderID);
-        break;        
-
-      case 'typing off':
-        sendTypingOff(senderID);
-        break;        
-
-      case 'account linking':
-        sendAccountLinking(senderID);
-        break;
-
-      default:
-        sendTextMessage(senderID, messageText);
-    }
+	
+	var msg = messageText.toLowerCase();
+	if(msg.indexOf("ciao") > -1){
+		//Saluto
+		var userName = getUserName(senderID);
+		sendTextMessage(senderID, "Ciao " + userName);
+	}
+	else if(msg.indexOf("il king dei derp") > -1 || msg.indexOf("ragozzino") > -1){
+		sendTextMessage(senderID, "Ebbene si l'unico che merita questo appellativo è proprio lui, l'inimitabile e inarrivabile King del derpaggio, Giuseppe Ragozzino!");
+		sendImageMessage(senderID, "/assets/king.jpg")
+	}
+	else if(msg === "quanto mi sento derp?"){
+		qrQuantoMiSentoDerp(senderID);
+	}
+	else if(msg === "sto derpando"){
+		sendCommandList(senderID);
+	}
+	else{
+		//Caso di default
+		sendTextMessage(senderID, "Scusami, ma visto che sono un po derp, non ho capito... se vuoi conoscere la mia lista di comandi scrivi \"sto derpando\", altrimenti prova ad indovinare.")
+	}
+   
   } else if (messageAttachments) {
     sendTextMessage(senderID, "Message with attachment received");
   }
@@ -796,6 +764,103 @@ function sendAccountLinking(recipientId) {
 
   callSendAPI(messageData);
 }
+
+function getUserName(userID){
+	request({
+    uri: 'https://graph.facebook.com/v2.6/' + userID,
+    qs: { access_token: PAGE_ACCESS_TOKEN },
+    method: 'GET',
+
+  }, function (error, response, body) {
+    if (!error && response.statusCode == 200) { 
+		console.log("Successfully called  API for getting user name of " + userID);
+		return response.name;
+
+    } else {
+      console.error("Failed calling Send API", response.statusCode, response.statusMessage, body.error);
+	  return "ERROR";
+    }
+  });  
+}
+
+
+
+function sendCommandList(recipientId) {
+  var messageData = {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "button",
+          text: "Aaaah stai derpando! Va beh nulla di nuovo... ecco a te la lista dei comandi.",
+          buttons:[{
+            type: "web_url",
+            url: "https://my-bot-my-messenger-bot.44fs.preview.openshiftapps.com/listacomandi.html",
+            title: "Lista comandi"
+          }]
+        }
+      }
+    }
+  };  
+
+  callSendAPI(messageData);
+}
+
+
+function sendImageMessage(recipientId, url) {
+  var messageData = {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      attachment: {
+        type: "image",
+        payload: {
+          url: SERVER_URL + url
+        }
+      }
+    }
+  };
+
+  callSendAPI(messageData);
+}
+
+
+function qrQuantoMiSentoDerp(recipientId) {
+  var messageData = {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      text: "Dimmi... quanto ti senti derp?",
+      quick_replies: [
+        {
+          "content_type":"text",
+          "title":"Poco",
+          "payload":"QUANTO_MI_SENTO_DERP_PICK_POCO"
+        },
+        {
+          "content_type":"text",
+          "title":"Abbastanza",
+          "payload":"QUANTO_MI_SENTO_DERP_PICK_ABBASTANZA"
+        },
+        {
+          "content_type":"text",
+          "title":"Molto",
+          "payload":"QUANTO_MI_SENTO_DERP_PICK_MOLTO"
+        }
+      ]
+    }
+  };
+
+  callSendAPI(messageData);
+}
+
+
+
 
 /*
  * Call the Send API. The message data goes in the body. If successful, we'll 
