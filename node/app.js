@@ -379,7 +379,7 @@ function sayHello(userID){
   }, function (error, response, body) {
     if (!error && response.statusCode == 200) { 
 		console.log("Successfully called  API for getting user name of " + userID + "RESPONSE: " + JSON.stringify(response) + "BODY: " + body);
-		sendTextMessage(senderID, "Ciao " + response.name);
+		sendTextMessage(userID, "Ciao " + response.name);
 
     } else {
       console.error("Failed calling Send API", response.statusCode, response.statusMessage, body.error);
